@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerControls controls;
     private CharacterController characterController;
 
-
     [Header("Movement Info")]
     [SerializeField] private float moveSpeed;
     private Vector3 movementDirection;
+    [SerializeField] private float gravityScale = 9.81f;
+    private float verticalVelocity;
     private Vector2 moveInput;
+
+    [Header("Aim Info")]
+    [SerializeField] private Transform aim;
+    [SerializeField] private LayerMask aimLayerMask;
+    private Vector3 lookingDirection;
     private Vector2 aimInput;
 
     private void Awake()
@@ -34,11 +37,29 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ApplyMovement();
+        AimTowardsMouse();
+    }
+
+    private void AimTowardsMouse()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(aimInput);
+
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
+        {
+            lookingDirection = hitInfo.point - transform.position;
+            lookingDirection.y = 0f;
+            lookingDirection.Normalize();
+
+            transform.forward = lookingDirection;
+
+            aim.position = new Vector3(hitInfo.point.x, transform.position.y, hitInfo.point.z);
+        }
     }
 
     private void ApplyMovement()
     {
         movementDirection = new Vector3(moveInput.x, 0, moveInput.y);
+        ApplyGravity();
 
         if (movementDirection.magnitude > 0)
         {
@@ -46,9 +67,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Shoot()
+    private void ApplyGravity()
     {
-        Debug.Log("Shoot\n");
+        if (!characterController.isGrounded)
+        {
+            verticalVelocity -= gravityScale * Time.deltaTime;
+            movementDirection.y = verticalVelocity;
+        }
+        else
+        {
+            verticalVelocity = -.5f;
+        }
     }
 
     private void OnEnable()
