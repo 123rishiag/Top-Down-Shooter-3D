@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponVisualController : MonoBehaviour
 {
+
+    private Animator animator;
+
     [SerializeField] private Transform[] gunTransforms;
 
     [SerializeField] private Transform pistol;
@@ -17,6 +18,11 @@ public class WeaponVisualController : MonoBehaviour
     [Header("Left Hand IK")]
     [SerializeField] private Transform leftHandTarget;
 
+    private void Awake()
+    {
+        animator = GetComponentInParent<Animator>();
+    }
+
     private void Start()
     {
         SwitchOnGun(pistol);
@@ -27,22 +33,27 @@ public class WeaponVisualController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SwitchOnGun(pistol);
+            SwitchAnimationLayer(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SwitchOnGun(revolver);
+            SwitchAnimationLayer(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             SwitchOnGun(autoRifle);
+            SwitchAnimationLayer(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             SwitchOnGun(shotgun);
+            SwitchAnimationLayer(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             SwitchOnGun(sniperRifle);
+            SwitchAnimationLayer(3);
         }
     }
 
@@ -56,7 +67,7 @@ public class WeaponVisualController : MonoBehaviour
 
     private void SwitchOffGuns()
     {
-        for(int i = 0; i < gunTransforms.Length; i++)
+        for (int i = 0; i < gunTransforms.Length; i++)
         {
             gunTransforms[i].gameObject.SetActive(false);
         }
@@ -68,5 +79,14 @@ public class WeaponVisualController : MonoBehaviour
 
         leftHandTarget.localPosition = targetTransform.localPosition;
         leftHandTarget.localRotation = targetTransform.localRotation;
+    }
+
+    private void SwitchAnimationLayer(int layerIndex)
+    {
+        for (int i = 1; i < animator.layerCount; i++)
+        {
+            animator.SetLayerWeight(i, 0);
+        }
+        animator.SetLayerWeight(layerIndex, 1);
     }
 }
