@@ -1993,7 +1993,9 @@ MonoBehaviour:
   shotgun: {fileID: 1305535108}
   sniperRifle: {fileID: 1351124414}
   rigIncreaseStep: 2.75
-  leftHandTarget: {fileID: 842333566}
+  leftHandIK: {fileID: 1666733797}
+  leftHandIK_Target: {fileID: 842333566}
+  leftHandIK_IncreaseStep: 2.5
 --- !u!1 &1435407821
 GameObject:
   m_ObjectHideFlags: 0
