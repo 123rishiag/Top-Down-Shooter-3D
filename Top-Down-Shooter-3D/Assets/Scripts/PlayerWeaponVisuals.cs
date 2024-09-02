@@ -86,9 +86,14 @@ public class PlayerWeaponVisuals : MonoBehaviour
         rig.weight = 0.15f;
     }
 
-    private void PlayWeaponGrabAnimation(GrabType grabType)
+    private void ReduceLeftHandIKWeight()
     {
         leftHandIK.weight = 0f;
+    }
+
+    private void PlayWeaponGrabAnimation(GrabType grabType)
+    {
+        ReduceLeftHandIKWeight();
         ReduceRigWeight();
         animator.SetFloat("weaponGrabType", ((float)grabType));
         animator.SetTrigger("WeaponGrab");
