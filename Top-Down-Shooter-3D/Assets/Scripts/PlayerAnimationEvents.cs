@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class PlayerAnimationEvents : MonoBehaviour
 {
-    private WeaponVisualController visualController;
+    private PlayerWeaponVisuals visualController;
 
     private void Awake()
     {
-        visualController = GetComponentInParent<WeaponVisualController>();
+        visualController = GetComponentInParent<PlayerWeaponVisuals>();
     }
 
     public void ReloadIsOver()
     {
-        visualController.ReturnRigWeightToOne();
+        visualController.MaximizeRigWeight();
 
         // refill bullets;
     }
 
     public void ReturnRig()
     { 
-        visualController.ReturnRigWeightToOne();
-        visualController.ReturnLeftHandIKWeightToOne();
+        visualController.MaximizeRigWeight();
+        visualController.MaximizeLeftHandIKWeight();
     }
 
     public void WeaponGrabIsOver()
